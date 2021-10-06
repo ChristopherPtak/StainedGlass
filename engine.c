@@ -45,22 +45,22 @@ static float eval_Mandelbrot(float c_real, float c_imag)
  * Public interface
  */
 
-void set_view_x(double x)
+void EMSCRIPTEN_KEEPALIVE set_view_x(double x)
 {
     posx = x;
 }
 
-void set_view_y(double y)
+void EMSCRIPTEN_KEEPALIVE set_view_y(double y)
 {
     posy = y;
 }
 
-void set_view_scale(double s)
+void EMSCRIPTEN_KEEPALIVE set_view_scale(double s)
 {
     scale = s;
 }
 
-void render(size_t dimx, size_t dimy, uint8_t* array)
+void EMSCRIPTEN_KEEPALIVE render(size_t dimx, size_t dimy, uint8_t* array)
 {
     size_t i;
     size_t j;
