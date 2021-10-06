@@ -30,15 +30,15 @@
         const sizeY = display.height;
 
         // Get a buffer to pass to the renderer
-        let renderBufferSize = sizeX * sizeY * 4;
-        let renderBufferPtr = Module._malloc(renderBufferSize);
+        const renderBufferSize = sizeX * sizeY * 4;
+        const renderBufferPtr = Module._malloc(renderBufferSize);
         let renderBuffer = Module.HEAPU8.subarray(
             renderBufferPtr,
             renderBufferPtr + renderBufferSize
         );
 
         // Render the entire canvas onto the buffer
-        Module._render_Mandelbrot(sizeX, sizeY, renderBufferPtr, 0, 0, 0);
+        Module._render(sizeX, sizeY, renderBufferPtr, 0, 0, 0);
 
         // Get a buffer to write to the canvas
         let displayBuffer = context.getImageData(0, 0, sizeX, sizeY);
