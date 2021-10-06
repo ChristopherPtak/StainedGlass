@@ -10,34 +10,47 @@ let context = display.getContext('2d');
  * onto the page.
  */
 
-function setViewX(x)
+function setViewCenterX(x)
 {
     if (typeof x === 'number') {
-        Module._set_view_x(x);
+        Module._set_view_center_x(x);
     } else {
         throw TypeError('Argument to setViewX must be a number');
     }
 }
 
-function setViewY(y)
+function setViewCenterY(y)
 {
     if (typeof y === 'number') {
-        Module._set_view_y(y);
+        Module._set_view_center_y(y);
     } else {
         throw TypeError('Argument to setViewY must be a number');
     }
 }
 
-function setViewScale(scale)
+function setViewScaleX(scale)
 {
     if (typeof scale === 'number') {
         if (scale > 0) {
-            Module._set_view_scale(scale);
+            Module._set_view_scale_x(scale);
         } else {
-            throw RangeError('Argument to setViewScale must be positive');
+            throw RangeError('Argument to setViewScaleX must be positive');
         }
     } else {
-        throw TypeError('Argument to setViewScale must be a number');
+        throw TypeError('Argument to setViewScaleX must be a number');
+    }
+}
+
+function setViewScaleY(scale)
+{
+    if (typeof scale === 'number') {
+        if (scale > 0) {
+            Module._set_view_scale_y(scale);
+        } else {
+            throw RangeError('Argument to setViewScaleY must be positive');
+        }
+    } else {
+        throw TypeError('Argument to setViewScaleY must be a number');
     }
 }
 
@@ -95,9 +108,10 @@ window.onresize = refresh;
 Module.onRuntimeInitialized = function () {
 
     // Set default viewpoint position
-    setViewX(-2.5);
-    setViewY(2);
-    setViewScale(4.0);
+    setViewCenterX(0.0);
+    setViewCenterY(0.0);
+    setViewScaleX(1.0);
+    setViewScaleY(1.0);
 
     // Draw fractal
     refresh();

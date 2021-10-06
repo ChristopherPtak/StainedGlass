@@ -13,9 +13,10 @@
  * Not to be exported by Emscripten
  */
 
-static double posx  = 0.0000;
-static double posy  = 0.0000;
-static double scale = 1.0000;
+static double center_x = 0.0000;
+static double center_y = 0.0000;
+static double scale_x  = 1.0000;
+static double scale_y  = 1.0000;
 
 static float eval_Mandelbrot(float c_real, float c_imag)
 {
@@ -46,19 +47,24 @@ static float eval_Mandelbrot(float c_real, float c_imag)
  * Public interface
  */
 
-void EMSCRIPTEN_KEEPALIVE set_view_x(double x)
+void EMSCRIPTEN_KEEPALIVE set_view_center_x(double x)
 {
-    posx = x;
+    center_x = x;
 }
 
-void EMSCRIPTEN_KEEPALIVE set_view_y(double y)
+void EMSCRIPTEN_KEEPALIVE set_view_center_y(double y)
 {
-    posy = y;
+    center_y = y;
 }
 
-void EMSCRIPTEN_KEEPALIVE set_view_scale(double s)
+void EMSCRIPTEN_KEEPALIVE set_view_scale_x(double sx)
 {
-    scale = s;
+    scale_x = sx;
+}
+
+void EMSCRIPTEN_KEEPALIVE set_view_scale_y(double sy)
+{
+    scale_y = sy;
 }
 
 void EMSCRIPTEN_KEEPALIVE render(size_t dimx, size_t dimy, uint8_t* array)
@@ -70,11 +76,12 @@ void EMSCRIPTEN_KEEPALIVE render(size_t dimx, size_t dimy, uint8_t* array)
         for (j = 0; j < dimx; ++j) {
 
             size_t offset = 4 * ((dimx * i) + j);
-            float c_real = posx + ((float) j / dimx) * scale;
-            float c_imag = posy - ((float) i / dimy) * scale;
-            uint8_t value = 255 * eval_Mandelbrot(c_real, c_imag);
 
-            assert(offset <= (4 * dimx * dimy));
+            float corner_x = center_x - (0.5 * scale_x);
+            float corner_y = center_y + (0.5 * scale_y);
+            float c_real = corner_x + ((float) j / dimx) * scale_x;
+            float c_imag = corner_y - ((float) i / dimy) * scale_y;
+            uint8_t value = 255 * eval_Mandelbrot(c_real, c_imag);
 
             array[offset + 0] = value;
             array[offset + 1] = value;
