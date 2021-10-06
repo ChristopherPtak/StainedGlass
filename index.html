@@ -11,5 +11,53 @@
     <!-- Main area to draw fractals -->
     <canvas id="display" width=256 height=256></canvas>
 
+    <!-- Connects the renderer to the canvas -->
+    <script>
+
+    /*
+     * Interface to rendering engine.
+     *
+     * These functions interact with the compiled WASM to set the desired
+     * properties of the rendered image and to convert the rendered output
+     * onto the page.
+     */
+
+    function draw()
+    {
+        let display = document.getElementById('display');
+        let context = display.getContext('2d');
+        const sizeX = display.width;
+        const sizeY = display.height;
+
+        // Get a buffer to pass to the renderer
+        let renderBufferSize = sizeX * sizeY * 4;
+        let renderBufferPtr = Module._malloc(renderBufferSize);
+        let renderBuffer = Module.HEAPU8.subarray(
+            renderBufferPtr,
+            renderBufferPtr + renderBufferSize
+        );
+
+        // Render the entire canvas onto the buffer
+        Module._render_Mandelbrot(sizeX, sizeY, renderBufferPtr, 0, 0, 0);
+
+        // Get a buffer to write to the canvas
+        let displayBuffer = context.getImageData(0, 0, sizeX, sizeY);
+        let displayData = displayBuffer.data;
+
+        // Copy data into the buffer
+        for (let i = 0; i < displayData.length; ++i) {
+            displayData[i] = renderBuffer[i];
+        }
+
+        // Copy buffered data into the canvas
+        context.putImageData(displayBuffer, 0, 0);
+    }
+
+    Module.onRuntimeInitialized = function () {
+        draw();
+    };
+
+    </script>
+
   </body>
 </html>
