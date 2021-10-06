@@ -1,5 +1,6 @@
 
 #include <assert.h>
+#include <math.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -18,16 +19,17 @@ static double center_y = 0.0000;
 static double scale_x  = 1.0000;
 static double scale_y  = 1.0000;
 
-static float eval_Mandelbrot(float c_real, float c_imag)
+static float eval_Mandelbrot(double c_real, double c_imag)
 {
     unsigned int i;
-    float z_real = 0.0;
-    float z_imag = 0.0;
+    double z_real = 0.0;
+    double z_imag = 0.0;
 
     for (i = 0; i < MANDELBROT_MAX_ITER; ++i) {
 
-        float tz_real = z_real;
-        float tz_imag = z_imag;
+        double tz_real = z_real;
+        double tz_imag = z_imag;
+        double z_abs;
 
         z_real = (tz_real * tz_real) - (tz_imag * tz_imag);
         z_imag = 2 * tz_real * tz_imag;
@@ -35,8 +37,10 @@ static float eval_Mandelbrot(float c_real, float c_imag)
         z_real += c_real;
         z_imag += c_imag;
 
-        if ((z_real * z_real) + (z_imag * z_imag) > 2) {
-            return (float) i / MANDELBROT_MAX_ITER;
+        z_abs = sqrt((z_real * z_real) + (z_imag * z_imag));
+        if (z_abs > 2) {
+            float smooth = i - log(log(z_abs) / log(2));
+            return smooth / MANDELBROT_MAX_ITER;
         }
     }
 
@@ -77,10 +81,10 @@ void EMSCRIPTEN_KEEPALIVE render(size_t dimx, size_t dimy, uint8_t* array)
 
             size_t offset = 4 * ((dimx * i) + j);
 
-            float corner_x = center_x - (0.5 * scale_x);
-            float corner_y = center_y + (0.5 * scale_y);
-            float c_real = corner_x + ((float) j / dimx) * scale_x;
-            float c_imag = corner_y - ((float) i / dimy) * scale_y;
+            double corner_x = center_x - (0.5 * scale_x);
+            double corner_y = center_y + (0.5 * scale_y);
+            double c_real = corner_x + ((double) j / dimx) * scale_x;
+            double c_imag = corner_y - ((double) i / dimy) * scale_y;
             uint8_t value = 255 * eval_Mandelbrot(c_real, c_imag);
 
             array[offset + 0] = value;
