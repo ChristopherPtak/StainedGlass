@@ -2,6 +2,8 @@
 let display = document.getElementById('display');
 let context = display.getContext('2d');
 
+let scale = 1.0;
+
 /*
  * Interface to rendering engine.
  *
@@ -95,23 +97,29 @@ function render()
 
 function refresh()
 {
-    display.width = window.innerWidth;
-    display.height = window.innerHeight;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
 
+    setViewScaleX(scale * width / Math.min(width, height));
+    setViewScaleY(scale * height / Math.min(width, height));
+
+    display.width = width;
+    display.height = height;
     render();
 }
 
 // Refresh whenever the window is resized
-window.onresize = refresh;
+window.onresize = function () {
+    refresh();
+};
 
 // Run as soon as rendering engine is available
 Module.onRuntimeInitialized = function () {
 
     // Set default viewpoint position
-    setViewCenterX(0.0);
-    setViewCenterY(0.0);
-    setViewScaleX(1.0);
-    setViewScaleY(1.0);
+    setViewCenterX(-0.40);
+    setViewCenterY( 0.00);
+    scale = 2.5;
 
     // Draw fractal
     refresh();
