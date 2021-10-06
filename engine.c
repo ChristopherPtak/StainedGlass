@@ -7,6 +7,15 @@
 
 #define MANDELBROT_MAX_ITER 50
 
+/*
+ * Internal rendering functions and state
+ * Not to be exported by Emscripten
+ */
+
+static double posx  = 0.0000;
+static double posy  = 0.0000;
+static double scale = 1.0000;
+
 static float eval_Mandelbrot(float c_real, float c_imag)
 {
     unsigned int i;
@@ -32,8 +41,26 @@ static float eval_Mandelbrot(float c_real, float c_imag)
     return 0.0;
 }
 
-void render(size_t dimx, size_t dimy, uint8_t* array,
-            double posx, double posy, double scale)
+/*
+ * Public interface
+ */
+
+void set_view_x(double x)
+{
+    posx = x;
+}
+
+void set_view_y(double y)
+{
+    posy = y;
+}
+
+void set_view_scale(double s)
+{
+    scale = s;
+}
+
+void render(size_t dimx, size_t dimy, uint8_t* array)
 {
     size_t i;
     size_t j;
@@ -42,8 +69,8 @@ void render(size_t dimx, size_t dimy, uint8_t* array,
         for (j = 0; j < dimy; ++j) {
 
             size_t offset = 4 * ((dimx * i) + j);
-            float c_real = posx + ((float) i / dimx);
-            float c_imag = posy - ((float) j / dimy);
+            float c_real = posx + ((float) i / dimx) * scale;
+            float c_imag = posy - ((float) j / dimy) * scale;
             uint8_t value = 255 * eval_Mandelbrot(c_real, c_imag);
 
             array[offset + 0] = value;
