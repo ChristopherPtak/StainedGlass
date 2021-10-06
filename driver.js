@@ -60,8 +60,24 @@ function setViewScaleY(scale)
 
 function render()
 {
-    const sizeX = display.width;
-    const sizeY = display.height;
+    const sizeX = window.innerWidth;
+    const sizeY = window.innerHeight;
+
+    display.width = sizeX;
+    display.height = sizeY;
+
+    /*
+     * 1. Pass updated coordinates to rendering engine
+     */
+
+    Module._set_view_scale_x(viewScale * sizeX / Math.min(sizeX, sizeY));
+    Module._set_view_scale_y(viewScale * sizeY / Math.min(sizeX, sizeY));
+    Module._set_view_center_x(viewCenterX);
+    Module._set_view_center_y(viewCenterY);
+
+    /*
+     * 2. Render and display result
+     */
 
     // Get a buffer to pass to the renderer
     const renderBufferSize = sizeX * sizeY * 4;
@@ -72,7 +88,7 @@ function render()
     );
 
     // Render the entire canvas onto the buffer
-    Module._render(sizeX, sizeY, renderBufferPtr, 0, 0, 0);
+    Module._render(sizeX, sizeY, renderBufferPtr);
 
     // Get a buffer to write to the canvas
     let displayBuffer = context.getImageData(0, 0, sizeX, sizeY);
@@ -83,11 +99,11 @@ function render()
         displayData[i] = renderBuffer[i];
     }
 
-    // Free the render buffer
-    Module._free(renderBufferPtr);
-
     // Copy buffered data into the canvas
     context.putImageData(displayBuffer, 0, 0);
+
+    // Free the render buffer
+    Module._free(renderBufferPtr);
 }
 
 /*
@@ -97,53 +113,49 @@ function render()
  * user interactions and events like window size changes.
  */
 
-function refresh()
-{
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-
-    setViewScaleX(viewScale * width / Math.min(width, height));
-    setViewScaleY(viewScale * height / Math.min(width, height));
-
-    display.width = width;
-    display.height = height;
-
-    setViewCenterX(viewCenterX);
-    setViewCenterY(viewCenterY);
-
-    render();
-}
-
 function zoomIn(pointX, pointY)
 {
     viewCenterX += pointX;
     viewCenterY -= pointY;
     viewScale *= 0.5;
 
-    refresh();
+    render();
 }
 
 function zoomOut()
 {
+    viewScale *= 2.0;
 
+    if (viewScale >= 4.0) {
+        viewCenterX = -0.40;
+        viewCenterY =  0.00;
+        viewScale   =  4.00;
+    }
+
+    render();
 }
 
 // Refresh whenever the window is resized
 window.onresize = function () {
-    refresh();
+    render();
 };
 
 window.onclick = function (mouseEvent) {
-
-    const pointX = viewScale * (mouseEvent.x / display.width - 0.5);
-    const pointY = viewScale * (mouseEvent.y / display.width - 0.5);
-
-    zoomIn(pointX, pointY);
+    if (mouseEvent.x < 100 || mouseEvent.x > (display.width - 100) ||
+        mouseEvent.y < 100 || mouseEvent.y > (display.height - 100)) {
+        // Clicking near the border means zoom out
+        zoomOut();
+    } else {
+        // Otherwise, zoom in on the clicked point
+        const pointX = viewScale * (mouseEvent.x / display.width - 0.5);
+        const pointY = viewScale * (mouseEvent.y / display.height - 0.5);
+        zoomIn(pointX, pointY);
+    }
 }
 
 // INITIALIZATION
 // Run as soon as rendering engine is available
 Module.onRuntimeInitialized = function () {
-    refresh();
+    render();
 };
 
