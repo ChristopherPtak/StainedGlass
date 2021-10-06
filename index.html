@@ -10,7 +10,7 @@
     <script src="engine.js"></script>
 
     <!-- Main area to draw fractals -->
-    <canvas id="display" width=256 height=256></canvas>
+    <canvas id="display" width=512 height=512></canvas>
 
     <!-- Connects the renderer to the canvas -->
     <script>
@@ -85,7 +85,15 @@
         context.putImageData(displayBuffer, 0, 0);
     }
 
+    // Run as soon as rendering engine is available
     Module.onRuntimeInitialized = function () {
+
+        // Set default viewpoint position
+        setViewX(-2);
+        setViewY(2);
+        setViewScale(4.0);
+
+        // Draw fractal
         render();
     };
 

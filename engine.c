@@ -69,8 +69,8 @@ void render(size_t dimx, size_t dimy, uint8_t* array)
         for (j = 0; j < dimy; ++j) {
 
             size_t offset = 4 * ((dimx * i) + j);
-            float c_real = posx + ((float) i / dimx) * scale;
-            float c_imag = posy - ((float) j / dimy) * scale;
+            float c_real = posx + ((float) j / dimx) * scale;
+            float c_imag = posy - ((float) i / dimy) * scale;
             uint8_t value = 255 * eval_Mandelbrot(c_real, c_imag);
 
             array[offset + 0] = value;
