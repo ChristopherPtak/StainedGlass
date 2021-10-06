@@ -66,6 +66,9 @@ function render()
         displayData[i] = renderBuffer[i];
     }
 
+    // Free the render buffer
+    Module._free(renderBufferPtr);
+
     // Copy buffered data into the canvas
     context.putImageData(displayBuffer, 0, 0);
 }
@@ -86,12 +89,13 @@ function refresh()
 }
 
 // Refresh whenever the window is resized
+window.onresize = refresh;
 
 // Run as soon as rendering engine is available
 Module.onRuntimeInitialized = function () {
 
     // Set default viewpoint position
-    setViewX(-2);
+    setViewX(-2.5);
     setViewY(2);
     setViewScale(4.0);
 

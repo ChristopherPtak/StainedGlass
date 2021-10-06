@@ -8,7 +8,7 @@
 EMCC = emcc
 
 EMFLAGS += -O2
-EMFLAGS += -s 'EXPORTED_FUNCTIONS=["_malloc"]'
+EMFLAGS += -s 'EXPORTED_FUNCTIONS=["_malloc", "_free"]'
 
 engine.js: engine.c
 	$(EMCC) $(EMFLAGS) -o engine.js engine.c

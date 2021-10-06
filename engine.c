@@ -1,4 +1,5 @@
 
+#include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -65,13 +66,15 @@ void EMSCRIPTEN_KEEPALIVE render(size_t dimx, size_t dimy, uint8_t* array)
     size_t i;
     size_t j;
 
-    for (i = 0; i < dimx; ++i) {
-        for (j = 0; j < dimy; ++j) {
+    for (i = 0; i < dimy; ++i) {
+        for (j = 0; j < dimx; ++j) {
 
             size_t offset = 4 * ((dimx * i) + j);
             float c_real = posx + ((float) j / dimx) * scale;
             float c_imag = posy - ((float) i / dimy) * scale;
             uint8_t value = 255 * eval_Mandelbrot(c_real, c_imag);
+
+            assert(offset <= (4 * dimx * dimy));
 
             array[offset + 0] = value;
             array[offset + 1] = value;
