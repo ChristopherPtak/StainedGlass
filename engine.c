@@ -7,7 +7,7 @@
 
 #include <emscripten.h>
 
-#define MANDELBROT_MAX_ITER 50
+#define MANDELBROT_MAX_ITER 100
 
 /*
  * Internal rendering functions and state
@@ -47,6 +47,45 @@ static float eval_Mandelbrot(double c_real, double c_imag)
     return 0.0;
 }
 
+void colorize_Grayscale(uint8_t* slice, float value)
+{
+    slice[0] = value * 255;
+    slice[1] = value * 255;
+    slice[2] = value * 255;
+    slice[3] = 255;
+}
+
+void colorize_Blackbody(uint8_t* slice, float value)
+{
+    // Create a fake blackbody-like color spectrum
+    // using a bunch of approximate functions
+
+    float r;
+    float g;
+    float b;
+
+    if (value < 0.5) {
+        // Exponential half
+        // Makes the red area larger
+        r = 1.2872169 * (1 - exp(-3 * value));
+    } else {
+        // Normal distribution half
+        r = exp(-pow(3 * (value - 0.5), 2));
+    }
+
+    // Normal distributions
+    g = 0.75 * exp(-pow(5 * (value - 0.66), 2));
+    b = exp(-pow(8 * (value - 0.8), 2));
+
+    slice[0] = r * 255;
+    slice[1] = g * 255;
+    slice[2] = b * 255;
+    slice[3] = 255;
+}
+
+static float (*eval_Fractal)(double, double) = &eval_Mandelbrot;
+static void (*colorize_Method)(uint8_t*, float) = &colorize_Grayscale;
+
 /*
  * Public interface
  */
@@ -71,6 +110,21 @@ void EMSCRIPTEN_KEEPALIVE set_view_scale_y(double sy)
     scale_y = sy;
 }
 
+void EMSCRIPTEN_KEEPALIVE set_fractal_Mandelbrot(void)
+{
+    eval_Fractal = &eval_Mandelbrot;
+}
+
+void EMSCRIPTEN_KEEPALIVE set_color_Grayscale(void)
+{
+    colorize_Method = &colorize_Grayscale;
+}
+
+void EMSCRIPTEN_KEEPALIVE set_color_Blackbody(void)
+{
+    colorize_Method = &colorize_Blackbody;
+}
+
 void EMSCRIPTEN_KEEPALIVE render(size_t dimx, size_t dimy, uint8_t* array)
 {
     size_t i;
@@ -79,18 +133,14 @@ void EMSCRIPTEN_KEEPALIVE render(size_t dimx, size_t dimy, uint8_t* array)
     for (i = 0; i < dimy; ++i) {
         for (j = 0; j < dimx; ++j) {
 
-            size_t offset = 4 * ((dimx * i) + j);
-
             double corner_x = center_x - (0.5 * scale_x);
             double corner_y = center_y + (0.5 * scale_y);
             double c_real = corner_x + ((double) j / dimx) * scale_x;
             double c_imag = corner_y - ((double) i / dimy) * scale_y;
-            uint8_t value = 255 * eval_Mandelbrot(c_real, c_imag);
+            float value = eval_Fractal(c_real, c_imag);
 
-            array[offset + 0] = value;
-            array[offset + 1] = value;
-            array[offset + 2] = value;
-            array[offset + 3] = 255;
+            size_t offset = 4 * ((dimx * i) + j);
+            colorize_Method(&array[offset], value);
 
         }
     }
