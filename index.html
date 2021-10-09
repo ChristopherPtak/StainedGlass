@@ -18,5 +18,36 @@
     <script src="engine.js"></script>
     <script src="driver.js"></script>
 
+    <!-- Connects user interactions to various functions of the Driver -->
+    <script>
+
+    Engine().then(function (engine) {
+
+        const display = document.getElementById('display');
+        const driver = new Driver(display, engine);
+
+        // Refresh whenever the window is resized
+        window.onresize = function () {
+            driver.render();
+        };
+
+        // Capture click events
+        window.onclick = function (mouseEvent) {
+            if (mouseEvent.x < 100 || mouseEvent.x > (display.width - 100) ||
+                mouseEvent.y < 100 || mouseEvent.y > (display.height - 100)) {
+                // Clicking near the border means zoom out
+                driver.zoomOut();
+            } else {
+                // Otherwise, zoom in on the clicked point
+                driver.zoomIn(mouseEvent.x, mouseEvent.y);
+            }
+        };
+
+        // Once everything is loaded, render the initial view
+        driver.render();
+    });
+
+    </script>
+
   </body>
 </html>

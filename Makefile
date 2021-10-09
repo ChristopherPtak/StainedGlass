@@ -8,14 +8,14 @@
 EMCC = emcc
 
 EMFLAGS += -O2
-EMFLAGS += -DCARDIOID_CHECKING
 EMFLAGS += -s 'EXPORTED_FUNCTIONS=["_malloc", "_free"]'
+EMFLAGS += -s 'EXPORT_NAME="Engine"'
+EMFLAGS += -s 'MODULARIZE=1'
 
 engine.js: engine.c
 	$(EMCC) $(EMFLAGS) -o engine.js engine.c
 
 .PHONY: clean
 clean:
-	-rm -f engine.js
-	-rm -f engine.wasm
+	-rm -f engine.js engine.wasm
 
