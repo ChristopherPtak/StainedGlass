@@ -15,11 +15,6 @@
  * Not to be exported by Emscripten
  */
 
-static double center_x = 0.0000;
-static double center_y = 0.0000;
-static double scale_x  = 1.0000;
-static double scale_y  = 1.0000;
-
 static float eval_Mandelbrot(double c_real, double c_imag)
 {
     unsigned int i;
@@ -102,26 +97,6 @@ static void (*colorize_Method)(uint8_t*, float) = &colorize_Grayscale;
  * Public interface
  */
 
-void EMSCRIPTEN_KEEPALIVE set_view_center_x(double x)
-{
-    center_x = x;
-}
-
-void EMSCRIPTEN_KEEPALIVE set_view_center_y(double y)
-{
-    center_y = y;
-}
-
-void EMSCRIPTEN_KEEPALIVE set_view_scale_x(double sx)
-{
-    scale_x = sx;
-}
-
-void EMSCRIPTEN_KEEPALIVE set_view_scale_y(double sy)
-{
-    scale_y = sy;
-}
-
 void EMSCRIPTEN_KEEPALIVE set_fractal_Mandelbrot(void)
 {
     eval_Fractal = &eval_Mandelbrot;
@@ -137,7 +112,9 @@ void EMSCRIPTEN_KEEPALIVE set_color_Blackbody(void)
     colorize_Method = &colorize_Blackbody;
 }
 
-void EMSCRIPTEN_KEEPALIVE render(size_t dimx, size_t dimy, uint8_t* array)
+void EMSCRIPTEN_KEEPALIVE render(size_t dimx, size_t dimy, uint8_t* array,
+                                 double center_x, double center_y,
+                                 double scale_x, double scale_y)
 {
     size_t i;
     size_t j;

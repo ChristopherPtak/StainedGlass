@@ -30,14 +30,14 @@ class Driver
         display.height = sizeY;
 
         /*
-         * 1. Pass updated coordinates to rendering engine
+         * 1. Calculate coordinates to render
          */
 
         const sizeMin = Math.min(sizeX, sizeY);
-        this.engine._set_view_scale_x(this.viewScale * sizeX / sizeMin);
-        this.engine._set_view_scale_y(this.viewScale * sizeY / sizeMin);
-        this.engine._set_view_center_x(this.viewCenterX);
-        this.engine._set_view_center_y(this.viewCenterY);
+        const scaleX = this.viewScale * sizeX / sizeMin;
+        const scaleY = this.viewScale * sizeY / sizeMin;
+        const centerX = this.viewCenterX;
+        const centerY = this.viewCenterY;
 
         /*
          * 2. Render and display result
@@ -52,7 +52,8 @@ class Driver
         );
 
         // Render the entire canvas onto the buffer
-        this.engine._render(sizeX, sizeY, renderBufferPtr);
+        this.engine._render(sizeX, sizeY, renderBufferPtr,
+                            centerX, centerY, scaleX, scaleY);
 
         // Get a buffer to write to the canvas
         let displayBuffer = this.context.getImageData(0, 0, sizeX, sizeY);
