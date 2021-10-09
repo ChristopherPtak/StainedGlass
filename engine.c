@@ -30,16 +30,15 @@ static float eval_Mandelbrot(double c_real, double c_imag)
     double z2_real = 0.0;
     double z2_imag = 0.0;
 
-#ifdef CARDIOID_CHECKING
-    {
-        double p = sqrt(pow(c_real - 0.25, 2) + pow(c_imag, 2));
-        if (c_real <= p - (2 * pow(p, 2)) + 0.25) {
-            return 0.0;
-        } else if (pow(c_real + 1, 2) + pow(c_imag, 2) <= 0.0625) {
-            return 0.0;
-        }
+    double p;
+
+    // Cardioid checking
+    p = sqrt(pow(c_real - 0.25, 2) + pow(c_imag, 2));
+    if (c_real <= p - (2 * pow(p, 2)) + 0.25) {
+        return 0.0;
+    } else if (pow(c_real + 1, 2) + pow(c_imag, 2) <= 0.0625) {
+        return 0.0;
     }
-#endif
 
     // Escape time calculation
     for (i = 0; i < MANDELBROT_MAX_ITER; ++i) {
