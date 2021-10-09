@@ -8,6 +8,7 @@
 EMCC = emcc
 
 EMFLAGS += -O2
+EMFLAGS += -DCARDIOID_CHECKING
 EMFLAGS += -s 'EXPORTED_FUNCTIONS=["_malloc", "_free"]'
 
 engine.js: engine.c

@@ -7,7 +7,8 @@
 
 #include <emscripten.h>
 
-#define MANDELBROT_MAX_ITER 50
+#define MANDELBROT_MAX_ITER 100
+#define MANDELBROT_ESC_DIST 4
 
 /*
  * Internal rendering functions and state
@@ -22,25 +23,36 @@ static double scale_y  = 1.0000;
 static float eval_Mandelbrot(double c_real, double c_imag)
 {
     unsigned int i;
+
     double z_real = 0.0;
     double z_imag = 0.0;
+
+    double z2_real = 0.0;
+    double z2_imag = 0.0;
+
+#ifdef CARDIOID_CHECKING
+    {
+        double p = sqrt(pow(c_real - 0.25, 2) + pow(c_imag, 2));
+        if (c_real <= p - (2 * pow(p, 2)) + 0.25) {
+            return 0.0;
+        } else if (pow(c_real + 1, 2) + pow(c_imag, 2) <= 0.0625) {
+            return 0.0;
+        }
+    }
+#endif
 
     // Escape time calculation
     for (i = 0; i < MANDELBROT_MAX_ITER; ++i) {
 
-        double tz_real = z_real;
-        double tz_imag = z_imag;
-        double z_abs;
+        z_imag = 2 * z_real * z_imag + c_imag;
+        z_real = z2_real - z2_imag + c_real;
 
-        z_real = (tz_real * tz_real) - (tz_imag * tz_imag);
-        z_imag = 2 * tz_real * tz_imag;
+        z2_real = z_real * z_real;
+        z2_imag = z_imag * z_imag;
 
-        z_real += c_real;
-        z_imag += c_imag;
-
-        z_abs = sqrt((z_real * z_real) + (z_imag * z_imag));
-        if (z_abs > 2) {
-            float smooth = i - log(log(z_abs) / log(2));
+        if (z2_real + z2_imag > MANDELBROT_ESC_DIST) {
+            float dist = sqrt(z2_real + z2_imag);
+            float smooth = i - log(log(dist) / log(2));
             return smooth / MANDELBROT_MAX_ITER;
         }
     }
