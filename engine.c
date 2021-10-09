@@ -7,7 +7,7 @@
 
 #include <emscripten.h>
 
-#define MANDELBROT_MAX_ITER 100
+#define MANDELBROT_MAX_ITER 50
 
 /*
  * Internal rendering functions and state
@@ -25,6 +25,7 @@ static float eval_Mandelbrot(double c_real, double c_imag)
     double z_real = 0.0;
     double z_imag = 0.0;
 
+    // Escape time calculation
     for (i = 0; i < MANDELBROT_MAX_ITER; ++i) {
 
         double tz_real = z_real;

@@ -88,7 +88,9 @@ function render()
     );
 
     // Render the entire canvas onto the buffer
+    console.time('render');
     Module._render(sizeX, sizeY, renderBufferPtr);
+    console.timeEnd('render');
 
     // Get a buffer to write to the canvas
     let displayBuffer = context.getImageData(0, 0, sizeX, sizeY);
