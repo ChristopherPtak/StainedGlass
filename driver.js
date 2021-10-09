@@ -21,50 +21,6 @@ class Driver
         this.engine = engine;
     }
 
-    setViewCenterX(x)
-    {
-        if (typeof x === 'number') {
-            this.engine._set_view_center_x(x);
-        } else {
-            throw TypeError('Argument to setViewX must be a number');
-        }
-    }
-
-    setViewCenterY(y)
-    {
-        if (typeof y === 'number') {
-            this.engine._set_view_center_y(y);
-        } else {
-            throw TypeError('Argument to setViewY must be a number');
-        }
-    }
-
-    setViewScaleX(scale)
-    {
-        if (typeof scale === 'number') {
-            if (scale > 0) {
-                this.engine._set_view_scale_x(scale);
-            } else {
-                throw RangeError('Argument to setViewScaleX must be positive');
-            }
-        } else {
-            throw TypeError('Argument to setViewScaleX must be a number');
-        }
-    }
-
-    setViewScaleY(scale)
-    {
-        if (typeof scale === 'number') {
-            if (scale > 0) {
-                this.engine._set_view_scale_y(scale);
-            } else {
-                throw RangeError('Argument to setViewScaleY must be positive');
-            }
-        } else {
-            throw TypeError('Argument to setViewScaleY must be a number');
-        }
-    }
-
     render()
     {
         const sizeX = window.innerWidth;
