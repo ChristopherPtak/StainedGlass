@@ -1,12 +1,4 @@
 
-/*
- * Interface to rendering engine.
- *
- * These functions interact with the compiled WASM to set the desired
- * properties of the rendered image and to convert the rendered output
- * onto the page.
- */
-
 class Driver
 {
     constructor(display, engine)
@@ -14,37 +6,135 @@ class Driver
         this.display = display;
         this.context = display.getContext('2d');
 
-        this.viewCenterX = -0.40;
-        this.viewCenterY =  0.00;
-        this.viewScale   =  2.50;
+        this.viewCenterX = -0.4;
+        this.viewCenterY =  0.0;
+        this.viewScale   =  2.5;
+
+        this.sizeX = 0;
+        this.sizeY = 0;
+        this.scaleX = 0.0;
+        this.scaleY = 0.0;
+        this.cornerX = 0.0;
+        this.cornerY = 0.0;
+
+        this.blockQueue = [];
 
         this.engine = engine;
     }
 
+    /*
+     * Interface to rendering engine.
+     *
+     * These functions interact with the compiled WASM to set the desired
+     * properties of the rendered image and to convert the rendered output
+     * onto the page.
+     */
+
+    update()
+    {
+        this.sizeX = window.innerWidth;
+        this.sizeY = window.innerHeight;
+        this.sizeMin = Math.min(this.sizeX, this.sizeY);
+        this.scaleX = this.viewScale * this.sizeX / this.sizeMin;
+        this.scaleY = this.viewScale * this.sizeY / this.sizeMin;
+        this.cornerX = this.viewCenterX - (0.5 * this.scaleX);
+        this.cornerY = this.viewCenterY + (0.5 * this.scaleY);
+
+        display.width = this.sizeX;
+        display.height = this.sizeY;
+
+        this.render();
+    }
+
     render()
     {
-        const sizeX = window.innerWidth;
-        const sizeY = window.innerHeight;
+        const BLOCK_SIZE = 256;
 
-        display.width = sizeX;
-        display.height = sizeY;
+        const blocksX = Math.ceil(this.sizeX / BLOCK_SIZE);
+        const blocksY = Math.ceil(this.sizeY / BLOCK_SIZE);
 
-        /*
-         * 1. Calculate coordinates to render
-         */
+        let blocks = [];
 
-        const sizeMin = Math.min(sizeX, sizeY);
-        const scaleX = this.viewScale * sizeX / sizeMin;
-        const scaleY = this.viewScale * sizeY / sizeMin;
-        const cornerX = this.viewCenterX - (0.5 * scaleX);
-        const cornerY = this.viewCenterY + (0.5 * scaleY);
+        // Divide the screen space into blocks
+        for (let i = 0; i < blocksX; ++i) {
+            for (let j = 0; j < blocksY; ++j) {
+                blocks.push({
+                    minX: i * BLOCK_SIZE,
+                    minY: j * BLOCK_SIZE,
+                    maxX: (i + 1) * BLOCK_SIZE,
+                    maxY: (j + 1) * BLOCK_SIZE,
+                    dist: Math.sqrt(Math.pow(i - (blocksX / 2), 2) +
+                                     Math.pow(j - (blocksY / 2), 2))
+                });
+            }
+        }
 
-        /*
-         * 2. Render and display result
-         */
+        // Sort the blocks by distance to the center
+        blocks.sort(function (blockA, blockB) {
+            if (blockA.dist > blockB.dist) {
+                return -1;
+            } else if (blockA.dist < blockB.dist) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        // Add all the blocks to the render queue
+        this.clearBlockQueue();
+        for (let i = 0; i < blocks.length; ++i) {
+            this.addBlockToQueue(blocks[i]);
+        }
+    }
+
+    clearBlockQueue()
+    {
+        this.blockQueue = [];
+    }
+
+    addBlockToQueue(block)
+    {
+        this.blockQueue.push(block);
+
+        if (this.blockQueue.length == 1) {
+            let driver = this;
+            setTimeout(function () {
+                driver.renderNextBlock()
+            });
+        }
+    }
+
+    renderNextBlock()
+    {
+        if (this.blockQueue.length !== 0) {
+            this.renderBlock(this.blockQueue.pop());
+            {
+                let driver = this;
+                setTimeout(function () {
+                    driver.renderNextBlock();
+                });
+            }
+        }
+    }
+
+    renderBlock(block)
+    {
+        // Unpack block
+        const minX = block.minX;
+        const minY = block.minY;
+        const maxX = block.maxX;
+        const maxY = block.maxY;
+
+        // Calculate the block dimensions
+        const resX = maxX - minX;
+        const resY = maxY - minY;
+
+        // Calculate the corner of this block
+        const myCornerX = this.cornerX + ((minX / this.sizeX) * this.scaleX);
+        const myCornerY = this.cornerY - ((minY / this.sizeY) * this.scaleY);
 
         // Get a buffer to pass to the renderer
-        const renderBufferSize = sizeX * sizeY * 4;
+        const renderBufferSize = resX * resY * 4;
         const renderBufferPtr = this.engine._malloc(renderBufferSize);
         let renderBuffer = this.engine.HEAPU8.subarray(
             renderBufferPtr,
@@ -52,11 +142,14 @@ class Driver
         );
 
         // Render the entire canvas onto the buffer
-        this.engine._render(sizeX, sizeY, renderBufferPtr,
-                            cornerX, cornerY, scaleX, scaleY);
+        this.engine._render(resX, resY,
+                            renderBufferPtr,
+                            myCornerX, myCornerY,
+                            resX / this.sizeX * this.scaleX,
+                            resY / this.sizeY * this.scaleY);
 
         // Get a buffer to write to the canvas
-        let displayBuffer = this.context.getImageData(0, 0, sizeX, sizeY);
+        let displayBuffer = this.context.getImageData(minX, minY, resX, resY);
         let displayData = displayBuffer.data;
 
         // Copy data into the buffer
@@ -65,7 +158,7 @@ class Driver
         }
 
         // Copy buffered data into the canvas
-        this.context.putImageData(displayBuffer, 0, 0);
+        this.context.putImageData(displayBuffer, minX, minY);
 
         // Free the render buffer
         this.engine._free(renderBufferPtr);
@@ -87,7 +180,7 @@ class Driver
         this.viewCenterY -= pointY;
         this.viewScale *= 0.5;
 
-        this.render();
+        this.update();
     }
 
     zoomOut()
@@ -100,7 +193,7 @@ class Driver
             this.viewScale   =  4.00;
         }
 
-        this.render();
+        this.update();
     }
 
 }

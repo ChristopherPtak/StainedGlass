@@ -28,7 +28,7 @@
 
         // Refresh whenever the window is resized
         window.onresize = function () {
-            driver.render();
+            driver.update();
         };
 
         // Capture click events
@@ -44,7 +44,7 @@
         };
 
         // Once everything is loaded, render the initial view
-        driver.render();
+        driver.update();
     });
 
     </script>
