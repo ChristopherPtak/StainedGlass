@@ -113,7 +113,7 @@ void EMSCRIPTEN_KEEPALIVE set_color_Blackbody(void)
 }
 
 void EMSCRIPTEN_KEEPALIVE render(size_t dimx, size_t dimy, uint8_t* array,
-                                 double center_x, double center_y,
+                                 double corner_x, double corner_y,
                                  double scale_x, double scale_y)
 {
     size_t i;
@@ -122,8 +122,6 @@ void EMSCRIPTEN_KEEPALIVE render(size_t dimx, size_t dimy, uint8_t* array,
     for (i = 0; i < dimy; ++i) {
         for (j = 0; j < dimx; ++j) {
 
-            double corner_x = center_x - (0.5 * scale_x);
-            double corner_y = center_y + (0.5 * scale_y);
             double c_real = corner_x + ((double) j / dimx) * scale_x;
             double c_imag = corner_y - ((double) i / dimy) * scale_y;
             float value = eval_Fractal(c_real, c_imag);

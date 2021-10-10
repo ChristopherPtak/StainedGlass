@@ -36,8 +36,8 @@ class Driver
         const sizeMin = Math.min(sizeX, sizeY);
         const scaleX = this.viewScale * sizeX / sizeMin;
         const scaleY = this.viewScale * sizeY / sizeMin;
-        const centerX = this.viewCenterX;
-        const centerY = this.viewCenterY;
+        const cornerX = this.viewCenterX - (0.5 * scaleX);
+        const cornerY = this.viewCenterY + (0.5 * scaleY);
 
         /*
          * 2. Render and display result
@@ -53,7 +53,7 @@ class Driver
 
         // Render the entire canvas onto the buffer
         this.engine._render(sizeX, sizeY, renderBufferPtr,
-                            centerX, centerY, scaleX, scaleY);
+                            cornerX, cornerY, scaleX, scaleY);
 
         // Get a buffer to write to the canvas
         let displayBuffer = this.context.getImageData(0, 0, sizeX, sizeY);
