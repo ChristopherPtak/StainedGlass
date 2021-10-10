@@ -63,8 +63,8 @@ class Driver
                     minY: j * BLOCK_SIZE,
                     maxX: (i + 1) * BLOCK_SIZE,
                     maxY: (j + 1) * BLOCK_SIZE,
-                    dist: Math.sqrt(Math.pow(i - (blocksX / 2), 2) +
-                                     Math.pow(j - (blocksY / 2), 2))
+                    dist: Math.sqrt(Math.pow(i - (blocksX / 2) + 0.5, 2) +
+                                    Math.pow(j - (blocksY / 2) + 0.5, 2))
                 });
             }
         }
@@ -141,7 +141,7 @@ class Driver
             renderBufferPtr + renderBufferSize
         );
 
-        // Render the entire canvas onto the buffer
+        // Render the block into the buffer
         this.engine._render(resX, resY,
                             renderBufferPtr,
                             myCornerX, myCornerY,
