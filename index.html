@@ -33,6 +33,7 @@
 
         // Capture click events
         window.onclick = function (mouseEvent) {
+            mouseEvent.preventDefault();
             if (mouseEvent.x < 100 || mouseEvent.x > (display.width - 100) ||
                 mouseEvent.y < 100 || mouseEvent.y > (display.height - 100)) {
                 // Clicking near the border means zoom out
@@ -42,6 +43,11 @@
                 driver.zoomIn(mouseEvent.x, mouseEvent.y);
             }
         };
+
+        window.oncontextmenu = function (mouseEvent) {
+            // TODO: Add custom context menu
+            mouseEvent.preventDefault();
+        }
 
         // Once everything is loaded, render the initial view
         driver.update();
