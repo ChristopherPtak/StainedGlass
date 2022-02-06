@@ -99,7 +99,7 @@ class Driver
         if (this.blockQueue.length == 1) {
             let driver = this;
             setTimeout(function () {
-                driver.renderNextBlock()
+                driver.renderNextBlock();
             });
         }
     }
@@ -142,8 +142,8 @@ class Driver
         );
 
         // Render the block into the buffer
-        this.engine._render(resX, resY,
-                            renderBufferPtr,
+        this.engine._render(renderBufferPtr,
+                            resX, resY,
                             myCornerX, myCornerY,
                             resX / this.sizeX * this.scaleX,
                             resY / this.sizeY * this.scaleY);

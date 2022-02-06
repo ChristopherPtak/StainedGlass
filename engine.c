@@ -112,7 +112,7 @@ void EMSCRIPTEN_KEEPALIVE set_color_Blackbody(void)
     colorize_Method = &colorize_Blackbody;
 }
 
-void EMSCRIPTEN_KEEPALIVE render(size_t dimx, size_t dimy, uint8_t* array,
+void EMSCRIPTEN_KEEPALIVE render(uint8_t *array, size_t dimx, size_t dimy,
                                  double corner_x, double corner_y,
                                  double scale_x, double scale_y)
 {
