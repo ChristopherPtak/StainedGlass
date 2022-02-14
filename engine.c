@@ -7,8 +7,8 @@
 
 #include <emscripten.h>
 
-#define MANDELBROT_MAX_ITER 100
-#define MANDELBROT_ESC_DIST 4
+#define MANDELBROT_MAX_ITER 200
+#define MANDELBROT_ESC_DIST 8
 
 /*
  * Internal rendering functions and state
