@@ -56,7 +56,7 @@ static float eval_Mandelbrot(double c_real, double c_imag)
 
 void colorize_Grayscale(uint8_t* slice, float value)
 {
-    float adjusted = pow(value, 0.65);
+    float adjusted = pow(value, 0.6);
     slice[0] = adjusted * 255;
     slice[1] = adjusted * 255;
     slice[2] = adjusted * 255;
