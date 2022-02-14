@@ -22,23 +22,31 @@ canvas {
 
 }
 
-/*
- * Context menu
- */
-
 .menu {
 
   /* Positioning */
-  position: absolute;
+  position: fixed;
+  height: 100%;
+  /* width: 150px; */
+  z-index: 1;
 
   /* Box style */
-  background-color: rgba(0, 0, 0, 0.8);
-  padding: 4px;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px;
 
-  /* Text style */
+  /* Content style */
   font-family: Arial, sans-serif;
   font-size: 16px;
   color: white;
 
+}
+
+/*
+ * Make sure each option
+ * appears on a new line
+ */
+.menu > label, select {
+  display: block;
+  margin: 10px;
 }
 

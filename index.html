@@ -11,6 +11,21 @@
   </head>
   <body>
 
+    <!-- Side menu -->
+    <div class="menu">
+      <form id="menuform">
+        <label for="fractal">Fractal Type</label>
+        <select name="fractal">
+          <option>Mandelbrot</option>
+        </select>
+        <label for="colorscheme">Color Scheme</label>
+        <select name="colorscheme">
+          <option>Grayscale</option>
+          <option>Blackbody</option>
+        </select>
+      </form>
+    </div>
+
     <!-- Main area to draw fractals -->
     <canvas id="display"></canvas>
 
@@ -28,6 +43,7 @@
 
     Engine().then(function (engine) {
 
+        const menu = document.getElementById('menuform');
         const display = document.getElementById('display');
         const driver = new Driver(display, engine);
 
@@ -37,7 +53,7 @@
         };
 
         // Capture click events
-        window.onclick = function (mouseEvent) {
+        display.onclick = function (mouseEvent) {
             mouseEvent.preventDefault();
             if (mouseEvent.x < 100 || mouseEvent.x > (display.width - 100) ||
                 mouseEvent.y < 100 || mouseEvent.y > (display.height - 100)) {
@@ -49,9 +65,26 @@
             }
         };
 
-        window.oncontextmenu = function (mouseEvent) {
-            mouseEvent.preventDefault();
-        }
+        // Refresh the screen when the sidebar menu is used
+        menu.onchange = function () {
+
+            switch (menu.fractal.value) {
+            case 'Mandelbrot':
+                driver.setFractalMandelbrot();
+                break;
+            }
+
+            switch (menu.colorscheme.value) {
+            case 'Grayscale':
+                driver.setColorGrayscale();
+                break;
+            case 'Blackbody':
+                driver.setColorBlackbody();
+                break;
+            }
+
+            driver.update();
+        };
 
         // Once everything is loaded, render the initial view
         driver.update();

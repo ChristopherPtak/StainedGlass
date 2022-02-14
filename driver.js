@@ -165,6 +165,30 @@ class Driver
     }
 
     /*
+     * Fractal rendering settings.
+     *
+     * These functions control setting the color, fractal type, and other
+     * options for the rendering engine.
+     */
+
+    // TODO: Make these functions take an enum
+
+    setFractalMandelbrot()
+    {
+        this.engine._set_fractal_Mandelbrot();
+    }
+
+    setColorGrayscale()
+    {
+        this.engine._set_color_Grayscale();
+    }
+
+    setColorBlackbody()
+    {
+        this.engine._set_color_Blackbody();
+    }
+
+    /*
      * Navigation and controls.
      *
      * These functions manage drawing and updating the canvas in response to
