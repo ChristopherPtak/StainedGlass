@@ -22,33 +22,6 @@
     <script>
 
     /*
-     * Functions for menu creation
-     */
-
-    function openMenu(x, y)
-    {
-         let box = document.createElement('div');
-
-         box.className = 'menu';
-         box.style.left = x + 'px';
-         box.style.top = y + 'px';
-
-         box.appendChild(addMenuItem('Fractal'));
-         box.appendChild(addMenuItem('Quality'));
-         box.appendChild(addMenuItem('Color Scheme'));
-
-         document.body.appendChild(box);
-    }
-
-    function addMenuItem(text)
-    {
-        let textNode = document.createTextNode(text);
-        let menuItem = document.createElement('div');
-        menuItem.appendChild(textNode);
-        return menuItem;
-    }
-
-    /*
      * Set up Engine and Driver and connect
      * events to various Driver functions
      */
@@ -78,7 +51,6 @@
 
         window.oncontextmenu = function (mouseEvent) {
             mouseEvent.preventDefault();
-            openMenu(mouseEvent.x, mouseEvent.y);
         }
 
         // Once everything is loaded, render the initial view
