@@ -30,11 +30,11 @@ canvas {
   z-index: 1;
 
   /* Box style */
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0));
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.70) 80%, rgba(0, 0, 0, 0));
   padding: 20px;
 
   /* Content style */
-  font-family: Arial, sans-serif;
+  font-family: Tahoma, sans-serif;
   font-size: 16px;
   color: white;
 
