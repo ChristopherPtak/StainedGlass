@@ -54,6 +54,39 @@ static float eval_Mandelbrot(double c_real, double c_imag)
     return 0.0;
 }
 
+static float eval_BurningShip(double c_real, double c_imag)
+{
+    // TODO: Reduce code duplication with the above
+
+    unsigned int i;
+
+    double z_real = 0.0;
+    double z_imag = 0.0;
+
+    double z2_real = 0.0;
+    double z2_imag = 0.0;
+
+    for (i = 0; i < MANDELBROT_MAX_ITER; ++i) {
+
+        z_real = fabs(z_real);
+        z_imag = fabs(z_imag);
+
+        z_imag = 2 * z_real * z_imag + c_imag;
+        z_real = z2_real - z2_imag + c_real;
+
+        z2_real = z_real * z_real;
+        z2_imag = z_imag * z_imag;
+
+        if (z2_real + z2_imag > MANDELBROT_ESC_DIST) {
+            float dist = sqrt(z2_real + z2_imag);
+            float smooth = i - log(log(dist) / log(2));
+            return smooth / MANDELBROT_MAX_ITER;
+        }
+    }
+
+    return 0.0;
+}
+
 void colorize_Grayscale(uint8_t* slice, float value)
 {
     float adjusted = pow(value, 0.6);
@@ -103,6 +136,11 @@ void EMSCRIPTEN_KEEPALIVE set_fractal_Mandelbrot(void)
     eval_Fractal = &eval_Mandelbrot;
 }
 
+void EMSCRIPTEN_KEEPALIVE set_fractal_BurningShip(void)
+{
+    eval_Fractal = &eval_BurningShip;
+}
+
 void EMSCRIPTEN_KEEPALIVE set_color_Grayscale(void)
 {
     colorize_Method = &colorize_Grayscale;
@@ -123,8 +161,8 @@ void EMSCRIPTEN_KEEPALIVE render(uint8_t *array, size_t dimx, size_t dimy,
     for (i = 0; i < dimy; ++i) {
         for (j = 0; j < dimx; ++j) {
 
-            double c_real = corner_x + ((double) j / dimx) * scale_x;
-            double c_imag = corner_y - ((double) i / dimy) * scale_y;
+            double c_real =   corner_x + ((double) j / dimx) * scale_x;
+            double c_imag = - corner_y + ((double) i / dimy) * scale_y;
             float value = eval_Fractal(c_real, c_imag);
 
             size_t offset = 4 * ((dimx * i) + j);

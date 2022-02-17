@@ -178,6 +178,11 @@ class Driver
         this.engine._set_fractal_Mandelbrot();
     }
 
+    setFractalBurningShip()
+    {
+        this.engine._set_fractal_BurningShip();
+    }
+
     setColorGrayscale()
     {
         this.engine._set_color_Grayscale();

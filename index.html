@@ -17,6 +17,7 @@
         <label for="fractal">Fractal Type</label>
         <select name="fractal">
           <option>Mandelbrot</option>
+          <option>Burning Ship</option>
         </select>
         <label for="colorscheme">Color Scheme</label>
         <select name="colorscheme">
@@ -75,6 +76,9 @@
             switch (menu.fractal.value) {
             case 'Mandelbrot':
                 driver.setFractalMandelbrot();
+                break;
+            case 'Burning Ship':
+                driver.setFractalBurningShip();
                 break;
             }
 
