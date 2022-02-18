@@ -193,6 +193,11 @@ class Driver
         this.engine._set_color_Blackbody();
     }
 
+    setColorRainbow()
+    {
+        this.engine._set_color_Rainbow();
+    }
+
     /*
      * Navigation and controls.
      *

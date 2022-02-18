@@ -124,6 +124,27 @@ void colorize_Blackbody(uint8_t* slice, float value)
     slice[3] = 255;
 }
 
+void colorize_Rainbow(uint8_t* slice, float value)
+{
+    if (value == 0.0) {
+        // Zero is black
+        slice[0] = 0;
+        slice[1] = 0;
+        slice[2] = 0;
+        slice[3] = 255;
+    } else {
+        // Otherwise calculate color on a rainbow spectrum
+        float r = 0.5 * cos(4 * M_PI * (value + 0.666)) + 0.5;
+        float g = 0.5 * cos(4 * M_PI * (value + 0.333)) + 0.5;
+        float b = 0.5 * cos(4 * M_PI * (value + 0.000)) + 0.5;
+        float m = (value < 0.05) ? (20 * value) : 1;
+        slice[0] = m * r * 255;
+        slice[1] = m * g * 255;
+        slice[2] = m * b * 255;
+        slice[3] = 255;
+    }
+}
+
 static float (*eval_Fractal)(double, double) = &eval_Mandelbrot;
 static void (*colorize_Method)(uint8_t*, float) = &colorize_Grayscale;
 
@@ -149,6 +170,11 @@ void EMSCRIPTEN_KEEPALIVE set_color_Grayscale(void)
 void EMSCRIPTEN_KEEPALIVE set_color_Blackbody(void)
 {
     colorize_Method = &colorize_Blackbody;
+}
+
+void EMSCRIPTEN_KEEPALIVE set_color_Rainbow(void)
+{
+    colorize_Method = &colorize_Rainbow;
 }
 
 void EMSCRIPTEN_KEEPALIVE render(uint8_t *array, size_t dimx, size_t dimy,

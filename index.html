@@ -23,6 +23,7 @@
         <select name="colorscheme">
           <option>Grayscale</option>
           <option>Blackbody</option>
+          <option>Rainbow</option>
         </select>
       </form>
     </div>
@@ -88,6 +89,9 @@
                 break;
             case 'Blackbody':
                 driver.setColorBlackbody();
+                break;
+            case 'Rainbow':
+                driver.setColorRainbow();
                 break;
             }
 
