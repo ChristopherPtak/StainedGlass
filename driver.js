@@ -48,7 +48,7 @@ class Driver
 
     render()
     {
-        const BLOCK_SIZE = 128;
+        const BLOCK_SIZE = 256;
 
         const blocksX = Math.ceil(this.sizeX / BLOCK_SIZE);
         const blocksY = Math.ceil(this.sizeY / BLOCK_SIZE);
