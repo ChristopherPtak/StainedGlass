@@ -146,7 +146,7 @@ void colorize_Rainbow(uint8_t* slice, float value)
 }
 
 static float (*eval_Fractal)(double, double) = &eval_Mandelbrot;
-static void (*colorize_Method)(uint8_t*, float) = &colorize_Grayscale;
+static void (*colorize_Method)(uint8_t*, float) = &colorize_Rainbow;
 
 /*
  * Public interface
