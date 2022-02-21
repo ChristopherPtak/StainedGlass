@@ -7,13 +7,13 @@
 
 #include <emscripten.h>
 
-#define MANDELBROT_MAX_ITER 200
-#define MANDELBROT_ESC_DIST 8
-
 /*
  * Internal rendering functions and state
  * Not to be exported by Emscripten
  */
+
+static unsigned int max_iterations = 400;
+static unsigned int escape_dist = 8;
 
 static float eval_Mandelbrot(double c_real, double c_imag)
 {
@@ -36,7 +36,7 @@ static float eval_Mandelbrot(double c_real, double c_imag)
     }
 
     // Escape time calculation
-    for (i = 0; i < MANDELBROT_MAX_ITER; ++i) {
+    for (i = 0; i < max_iterations; ++i) {
 
         z_imag = 2 * z_real * z_imag + c_imag;
         z_real = z2_real - z2_imag + c_real;
@@ -44,10 +44,10 @@ static float eval_Mandelbrot(double c_real, double c_imag)
         z2_real = z_real * z_real;
         z2_imag = z_imag * z_imag;
 
-        if (z2_real + z2_imag > MANDELBROT_ESC_DIST) {
+        if (z2_real + z2_imag > escape_dist) {
             float dist = sqrt(z2_real + z2_imag);
             float smooth = i - log(log(dist) / log(2));
-            return smooth / MANDELBROT_MAX_ITER;
+            return smooth / max_iterations;
         }
     }
 
@@ -66,7 +66,7 @@ static float eval_BurningShip(double c_real, double c_imag)
     double z2_real = 0.0;
     double z2_imag = 0.0;
 
-    for (i = 0; i < MANDELBROT_MAX_ITER; ++i) {
+    for (i = 0; i < max_iterations; ++i) {
 
         z_real = fabs(z_real);
         z_imag = fabs(z_imag);
@@ -77,10 +77,10 @@ static float eval_BurningShip(double c_real, double c_imag)
         z2_real = z_real * z_real;
         z2_imag = z_imag * z_imag;
 
-        if (z2_real + z2_imag > MANDELBROT_ESC_DIST) {
+        if (z2_real + z2_imag > escape_dist) {
             float dist = sqrt(z2_real + z2_imag);
             float smooth = i - log(log(dist) / log(2));
-            return smooth / MANDELBROT_MAX_ITER;
+            return smooth / max_iterations;
         }
     }
 
@@ -151,6 +151,16 @@ static void (*colorize_Method)(uint8_t*, float) = &colorize_Rainbow;
 /*
  * Public interface
  */
+
+void EMSCRIPTEN_KEEPALIVE set_max_iterations(unsigned int iter)
+{
+    max_iterations = iter;
+}
+
+void EMSCRIPTEN_KEEPALIVE set_escape_distance(unsigned int dist)
+{
+    escape_dist = dist;
+}
 
 void EMSCRIPTEN_KEEPALIVE set_fractal_Mandelbrot(void)
 {
