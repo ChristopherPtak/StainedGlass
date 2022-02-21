@@ -196,8 +196,10 @@ void EMSCRIPTEN_KEEPALIVE render(uint8_t *array, size_t dimx, size_t dimy,
     size_t i;
     size_t j;
 
-    //// For debugging purposes
-    //clock_t begin = clock();
+#ifndef NDEBUG
+    // For performance timing
+    clock_t begin = clock();
+#endif
 
     for (i = 0; i < dimy; ++i) {
         for (j = 0; j < dimx; ++j) {
@@ -212,8 +214,10 @@ void EMSCRIPTEN_KEEPALIVE render(uint8_t *array, size_t dimx, size_t dimy,
         }
     }
 
-    //clock_t end = clock();
-    //float elapsed = (float) (end - begin) / CLOCKS_PER_SEC;
-    //printf("Block rendered in %f seconds\n", elapsed);
+#ifndef NDEBUG
+    clock_t end = clock();
+    float elapsed = (float) (end - begin) / CLOCKS_PER_SEC;
+    printf("Block rendered in %f seconds\n", elapsed);
+#endif
 }
 
