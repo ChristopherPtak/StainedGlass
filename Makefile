@@ -7,7 +7,7 @@
 
 EMCC = emcc
 
-EMFLAGS += -O2
+EMFLAGS += -O2 -DNDEBUG
 EMFLAGS += -s 'EXPORTED_FUNCTIONS=["_malloc", "_free"]'
 EMFLAGS += -s 'EXPORT_NAME="Engine"'
 EMFLAGS += -s 'MODULARIZE=1'
