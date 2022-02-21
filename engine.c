@@ -152,7 +152,7 @@ static void (*colorize_Method)(uint8_t*, float) = &colorize_Rainbow;
  * Public interface
  */
 
-void EMSCRIPTEN_KEEPALIVE set_max_iterations(unsigned int iter)
+void EMSCRIPTEN_KEEPALIVE set_maximum_iterations(unsigned int iter)
 {
     max_iterations = iter;
 }

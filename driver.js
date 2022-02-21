@@ -167,9 +167,19 @@ class Driver
     /*
      * Fractal rendering settings.
      *
-     * These functions control setting the color, fractal type, and other
-     * options for the rendering engine.
+     * These functions control setting the color, fractal type, quality,
+     * and other options for the rendering engine.
      */
+
+    setMaximumIterations(iterations)
+    {
+        this.engine._set_maximum_iterations(iterations);
+    }
+
+    setEscapeDistance(distance)
+    {
+        this.engine._set_escape_distance(distance);
+    }
 
     // TODO: Make these functions take an enum
 

@@ -25,6 +25,13 @@
           <option>Blackbody</option>
           <option>Rainbow</option>
         </select>
+        <label for="quality">Quality</label>
+        <select name="quality">
+          <option>Very High</option>
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
+        </select>
       </form>
     </div>
 
@@ -70,6 +77,7 @@
         // Set default menu values
         menu.fractal.value = 'Mandelbrot';
         menu.colorscheme.value = 'Rainbow';
+        menu.quality.value = 'Medium';
 
         // Refresh the screen when the sidebar menu is used
         menu.onchange = function () {
@@ -92,6 +100,28 @@
                 break;
             case 'Rainbow':
                 driver.setColorRainbow();
+                break;
+            }
+
+
+            console.log(menu.quality.value);
+
+            switch (menu.quality.value) {
+            case 'Very High':
+                driver.setMaximumIterations(1600);
+                driver.setEscapeDistance(8);
+                break;
+            case 'High':
+                driver.setMaximumIterations(800);
+                driver.setEscapeDistance(8);
+                break;
+            case 'Medium':
+                driver.setMaximumIterations(400);
+                driver.setEscapeDistance(8);
+                break;
+            case 'Low':
+                driver.setMaximumIterations(100);
+                driver.setEscapeDistance(4);
                 break;
             }
 
