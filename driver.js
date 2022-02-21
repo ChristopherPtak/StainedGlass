@@ -220,15 +220,20 @@ class Driver
         const pointX = this.viewScale * (mouseX / this.display.width - 0.5);
         const pointY = this.viewScale * (mouseY / this.display.height - 0.5);
 
-        this.viewCenterX += pointX;
-        this.viewCenterY -= pointY;
+        this.viewCenterX += 0.5 * pointX;
+        this.viewCenterY -= 0.5 * pointY;
         this.viewScale *= 0.5;
 
         this.update();
     }
 
-    zoomOut()
+    zoomOut(mouseX, mouseY)
     {
+        const pointX = this.viewScale * (mouseX / this.display.width - 0.5);
+        const pointY = this.viewScale * (mouseY / this.display.height - 0.5);
+
+        this.viewCenterX += pointX;
+        this.viewCenterY += pointY;
         this.viewScale *= 2.0;
 
         if (this.viewScale >= 4.0) {

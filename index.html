@@ -61,13 +61,23 @@
             driver.update();
         };
 
+        // Capture scroll events
+        display.onwheel = function (mouseEvent) {
+            mouseEvent.preventDefault();
+            if (mouseEvent.deltaY < 0) {
+                driver.zoomIn(mouseEvent.x, mouseEvent.y);
+            } else {
+                driver.zoomOut(mouseEvent.x, mouseEvent.y);
+            }
+        }
+
         // Capture click events
         display.onclick = function (mouseEvent) {
             mouseEvent.preventDefault();
             if (mouseEvent.x < 100 || mouseEvent.x > (display.width - 100) ||
                 mouseEvent.y < 100 || mouseEvent.y > (display.height - 100)) {
                 // Clicking near the border means zoom out
-                driver.zoomOut();
+                driver.zoomOut(display.width / 2, dislay.height / 2);
             } else {
                 // Otherwise, zoom in on the clicked point
                 driver.zoomIn(mouseEvent.x, mouseEvent.y);
