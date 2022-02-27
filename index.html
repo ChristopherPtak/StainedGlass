@@ -65,9 +65,9 @@
         display.onwheel = function (mouseEvent) {
             mouseEvent.preventDefault();
             if (mouseEvent.deltaY < 0) {
-                driver.zoomIn(mouseEvent.x, mouseEvent.y);
+                driver.zoomIn(mouseEvent.x, mouseEvent.y, 1.2);
             } else {
-                driver.zoomOut(mouseEvent.x, mouseEvent.y);
+                driver.zoomOut(mouseEvent.x, mouseEvent.y, 1.2);
             }
         }
 
@@ -77,10 +77,10 @@
             if (mouseEvent.x < 100 || mouseEvent.x > (display.width - 100) ||
                 mouseEvent.y < 100 || mouseEvent.y > (display.height - 100)) {
                 // Clicking near the border means zoom out
-                driver.zoomOut(display.width / 2, display.height / 2);
+                driver.zoomOut(display.width / 2, display.height / 2, 2);
             } else {
                 // Otherwise, zoom in on the clicked point
-                driver.zoomIn(mouseEvent.x, mouseEvent.y);
+                driver.zoomIn(mouseEvent.x, mouseEvent.y, 2);
             }
         };
 

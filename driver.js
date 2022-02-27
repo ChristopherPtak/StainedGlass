@@ -215,26 +215,36 @@ class Driver
      * user interactions and events like window size changes.
      */
 
-    zoomIn(mouseX, mouseY)
+    zoomIn(mouseX, mouseY, amount)
     {
+        if (amount < 1) {
+            console.error('Invalid zoom amount');
+            return;
+        }
+
         const pointX = ((mouseX / this.sizeX) - 0.5) * this.scaleX;
         const pointY = ((mouseY / this.sizeY) - 0.5) * this.scaleY;
 
-        this.viewCenterX += 0.5 * pointX;
-        this.viewCenterY -= 0.5 * pointY;
-        this.viewScale *= 0.5;
+        this.viewCenterX += (1 / amount) * pointX;
+        this.viewCenterY -= (1 / amount) * pointY;
+        this.viewScale *= (1 / amount);
 
         this.update();
     }
 
-    zoomOut(mouseX, mouseY)
+    zoomOut(mouseX, mouseY, amount)
     {
+        if (amount < 1) {
+            console.error('Invalid zoom amount');
+            return;
+        }
+
         const pointX = ((mouseX / this.sizeX) - 0.5) * this.scaleX;
         const pointY = ((mouseY / this.sizeY) - 0.5) * this.scaleY;
 
-        this.viewCenterX += 2.0 * pointX;
-        this.viewCenterY += 2.0 * pointY;
-        this.viewScale *= 2.0;
+        this.viewCenterX += amount * pointX;
+        this.viewCenterY += amount * pointY;
+        this.viewScale *= amount;
 
         if (this.viewScale >= 4.0) {
             this.viewCenterX = -0.40;
