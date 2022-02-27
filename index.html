@@ -77,7 +77,7 @@
             if (mouseEvent.x < 100 || mouseEvent.x > (display.width - 100) ||
                 mouseEvent.y < 100 || mouseEvent.y > (display.height - 100)) {
                 // Clicking near the border means zoom out
-                driver.zoomOut(display.width / 2, dislay.height / 2);
+                driver.zoomOut(display.width / 2, display.height / 2);
             } else {
                 // Otherwise, zoom in on the clicked point
                 driver.zoomIn(mouseEvent.x, mouseEvent.y);
