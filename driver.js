@@ -217,8 +217,11 @@ class Driver
 
     zoomIn(mouseX, mouseY)
     {
-        const pointX = this.viewScale * (mouseX / this.display.width - 0.5);
-        const pointY = this.viewScale * (mouseY / this.display.height - 0.5);
+        const pointX = ((mouseX / this.sizeX) - 0.5) * this.scaleX;
+        const pointY = ((mouseY / this.sizeY) - 0.5) * this.scaleY;
+
+        console.log('pointX: ' + pointX);
+        console.log('pointY: ' + pointY);
 
         this.viewCenterX += 0.5 * pointX;
         this.viewCenterY -= 0.5 * pointY;
@@ -229,11 +232,11 @@ class Driver
 
     zoomOut(mouseX, mouseY)
     {
-        const pointX = this.viewScale * (mouseX / this.display.width - 0.5);
-        const pointY = this.viewScale * (mouseY / this.display.height - 0.5);
+        const pointX = ((mouseX / this.sizeX) - 0.5) * this.scaleX;
+        const pointY = ((mouseY / this.sizeY) - 0.5) * this.scaleY;
 
-        this.viewCenterX += pointX;
-        this.viewCenterY += pointY;
+        this.viewCenterX += 2.0 * pointX;
+        this.viewCenterY += 2.0 * pointY;
         this.viewScale *= 2.0;
 
         if (this.viewScale >= 4.0) {
