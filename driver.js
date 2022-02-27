@@ -220,9 +220,6 @@ class Driver
         const pointX = ((mouseX / this.sizeX) - 0.5) * this.scaleX;
         const pointY = ((mouseY / this.sizeY) - 0.5) * this.scaleY;
 
-        console.log('pointX: ' + pointX);
-        console.log('pointY: ' + pointY);
-
         this.viewCenterX += 0.5 * pointX;
         this.viewCenterY -= 0.5 * pointY;
         this.viewScale *= 0.5;
