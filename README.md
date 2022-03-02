@@ -3,18 +3,16 @@
 
 _A browser-based fractal explorer application_
 
-![Screenshot](example.jpg)
+## Usage
 
-### Usage
-
-#### Navigation
+### Navigation
 
 There are currently two ways to zoom in and out. Clicking on any spot will
 cause the screen to zoom in on that spot, while clicking close to the edge of
 the screen will zoom out from the center. Alternatively, scrolling in or out
 will zoom in or out centered on the mouse pointer.
 
-#### Rendering Settings
+### Rendering Settings
 
 The sidebar contains dropdowns for all relevant settings regarding fractal
 rendering and display. Clicking in the sidebar will not move the view, so the
@@ -26,7 +24,7 @@ of the whole screen.
   different color palattes.
 - Quality: Controls various low level rendering quality parameters.
 
-### Build Instructions
+## Build Instructions
 
 This repository has all the static web files needed for the web interface
 except for the Javascript/WASM. These must be compiled using Emscripten.
