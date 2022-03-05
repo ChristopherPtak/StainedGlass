@@ -24,10 +24,14 @@ of the whole screen.
   different color palattes.
 - Quality: Controls various low level rendering quality parameters.
 
-## Build Instructions
+## Installation
+
+### Prerequisites
 
 This repository has all the static web files needed for the web interface
 except for the Javascript/WASM. These must be compiled using Emscripten.
+
+### Build
 
 The provided `Makefile` has the necessary `emcc` command to compile the
 rendering engine. You can either install the Emscripten SDK and run `make`
@@ -43,4 +47,3 @@ the files in this directory to give access to the web interface. For an easy
 start, running `python3 -m http.server` in the repository will serve the
 web interface on `http://localhost:8000`, where it can be visited in the
 browser.
-
