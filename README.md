@@ -39,7 +39,7 @@ to compile the engine, or use the `emsdk` docker image with a command like
 the following.
 
 ```
-docker run --rm -v $(pwd):/src -u $(id -u):$(id -g) emscripten/emsdk make
+docker run --rm -v $(pwd):/src:Z -u $(id -u):$(id -g) emscripten/emsdk make
 ```
 
 When the rendering engine has been compiled a web server can simply serve
