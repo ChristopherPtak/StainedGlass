@@ -3,6 +3,8 @@
 
 _A browser-based fractal explorer application_
 
+Status: **IN PROGRESS**
+
 ## Usage
 
 ### Navigation
