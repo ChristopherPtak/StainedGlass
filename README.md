@@ -1,5 +1,5 @@
 
-# Fractal Viewer
+# Stained Glass Fractal Viewer
 
 _A browser-based fractal explorer application_
 
