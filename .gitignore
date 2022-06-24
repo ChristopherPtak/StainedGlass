@@ -1,2 +1,4 @@
 engine.js
 engine.wasm
+constants.h
+constants.js
