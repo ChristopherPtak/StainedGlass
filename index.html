@@ -42,6 +42,9 @@
     <script src="engine.js"></script>
     <script src="driver.js"></script>
 
+    <!-- Auto-generated enum values -->
+    <script src="constants.js"></script>
+
     <!-- Connects user interactions to various functions of the Driver -->
     <script>
 
@@ -94,22 +97,22 @@
 
             switch (menu.fractal.value) {
             case 'Mandelbrot':
-                driver.setFractalMandelbrot();
+                driver.setFractal(FRACTAL_MANDELBROT);
                 break;
             case 'Burning Ship':
-                driver.setFractalBurningShip();
+                driver.setFractal(FRACTAL_BURNING_SHIP);
                 break;
             }
 
             switch (menu.colorscheme.value) {
             case 'Grayscale':
-                driver.setColorGrayscale();
+                driver.setColor(COLOR_GRAYSCALE);
                 break;
             case 'Blackbody':
-                driver.setColorBlackbody();
+                driver.setColor(COLOR_BLACKBODY);
                 break;
             case 'Rainbow':
-                driver.setColorRainbow();
+                driver.setColor(COLOR_RAINBOW);
                 break;
             }
 

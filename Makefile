@@ -12,10 +12,16 @@ EMFLAGS += -s 'EXPORTED_FUNCTIONS=["_malloc", "_free"]'
 EMFLAGS += -s 'EXPORT_NAME="Engine"'
 EMFLAGS += -s 'MODULARIZE=1'
 
-engine.js: engine.c
+.PHONY: all
+all: engine.js
+
+engine.js: engine.c constants.h
 	$(EMCC) $(EMFLAGS) -o engine.js engine.c
+
+constants.h: make-constants.sh
+	$(SHELL) make-constants.sh
 
 .PHONY: clean
 clean:
-	-rm -f engine.js engine.wasm
+	-rm -f engine.js engine.wasm constants.h constants.js
 

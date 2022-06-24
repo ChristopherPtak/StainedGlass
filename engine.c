@@ -9,6 +9,8 @@
 
 #include <emscripten.h>
 
+#include "constants.h"
+
 /*
  * Internal rendering functions and state
  * Not to be exported by Emscripten
@@ -164,29 +166,38 @@ void EMSCRIPTEN_KEEPALIVE set_escape_distance(unsigned int dist)
     escape_dist = dist;
 }
 
-void EMSCRIPTEN_KEEPALIVE set_fractal_Mandelbrot(void)
+void EMSCRIPTEN_KEEPALIVE set_fractal(enum FractalType ft)
 {
-    eval_Fractal = &eval_Mandelbrot;
+    switch (ft) {
+
+    case FRACTAL_MANDELBROT:
+        eval_Fractal = &eval_Mandelbrot;
+        break;
+
+    case FRACTAL_BURNING_SHIP:
+        eval_Fractal = &eval_BurningShip;
+        break;
+
+    }
 }
 
-void EMSCRIPTEN_KEEPALIVE set_fractal_BurningShip(void)
+void EMSCRIPTEN_KEEPALIVE set_color(enum ColorMethod cm)
 {
-    eval_Fractal = &eval_BurningShip;
-}
+    switch (cm) {
 
-void EMSCRIPTEN_KEEPALIVE set_color_Grayscale(void)
-{
-    colorize_Method = &colorize_Grayscale;
-}
+    case COLOR_GRAYSCALE:
+        colorize_Method = &colorize_Grayscale;
+        break;
 
-void EMSCRIPTEN_KEEPALIVE set_color_Blackbody(void)
-{
-    colorize_Method = &colorize_Blackbody;
-}
+    case COLOR_BLACKBODY:
+        colorize_Method = &colorize_Blackbody;
+        break;
 
-void EMSCRIPTEN_KEEPALIVE set_color_Rainbow(void)
-{
-    colorize_Method = &colorize_Rainbow;
+    case COLOR_RAINBOW:
+        colorize_Method = &colorize_Rainbow;
+        break;
+
+    }
 }
 
 void EMSCRIPTEN_KEEPALIVE render(uint8_t *array, size_t dimx, size_t dimy,

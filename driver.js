@@ -181,31 +181,14 @@ class Driver
         this.engine._set_escape_distance(distance);
     }
 
-    // TODO: Make these functions take an enum
-
-    setFractalMandelbrot()
+    setFractal(fractal)
     {
-        this.engine._set_fractal_Mandelbrot();
+        this.engine._set_fractal(fractal);
     }
 
-    setFractalBurningShip()
+    setColor(color)
     {
-        this.engine._set_fractal_BurningShip();
-    }
-
-    setColorGrayscale()
-    {
-        this.engine._set_color_Grayscale();
-    }
-
-    setColorBlackbody()
-    {
-        this.engine._set_color_Blackbody();
-    }
-
-    setColorRainbow()
-    {
-        this.engine._set_color_Rainbow();
+        this.engine._set_color(color);
     }
 
     /*
