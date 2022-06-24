@@ -17,14 +17,14 @@ generate_enum()
 
     for element in $(echo "$@" | cut -d' ' -f2-)
     do
-        echo "    $element = $counter," >> $filename.h
-	echo "const $element = $counter;" >> $filename.js
+        echo "    ${enum_name}_${element} = $counter," >> $filename.h
+	echo "const ${enum_name}_${element} = $counter;" >> $filename.js
         counter=$(($counter + 1))
     done
 
     echo "};" >> $filename.h
 }
 
-generate_enum FractalType FRACTAL_MANDELBROT FRACTAL_BURNING_SHIP
-generate_enum ColorMethod COLOR_GRAYSCALE COLOR_BLACKBODY COLOR_RAINBOW
+generate_enum FractalType MANDELBROT BURNING_SHIP
+generate_enum ColorMethod GRAYSCALE BLACKBODY RAINBOW
 

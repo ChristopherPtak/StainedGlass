@@ -97,22 +97,22 @@
 
             switch (menu.fractal.value) {
             case 'Mandelbrot':
-                driver.setFractal(FRACTAL_MANDELBROT);
+                driver.setFractal(FractalType_MANDELBROT);
                 break;
             case 'Burning Ship':
-                driver.setFractal(FRACTAL_BURNING_SHIP);
+                driver.setFractal(FractalType_BURNING_SHIP);
                 break;
             }
 
             switch (menu.colorscheme.value) {
             case 'Grayscale':
-                driver.setColor(COLOR_GRAYSCALE);
+                driver.setColor(ColorMethod_GRAYSCALE);
                 break;
             case 'Blackbody':
-                driver.setColor(COLOR_BLACKBODY);
+                driver.setColor(ColorMethod_BLACKBODY);
                 break;
             case 'Rainbow':
-                driver.setColor(COLOR_RAINBOW);
+                driver.setColor(ColorMethod_RAINBOW);
                 break;
             }
 

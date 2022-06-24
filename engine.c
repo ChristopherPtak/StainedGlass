@@ -170,11 +170,11 @@ void EMSCRIPTEN_KEEPALIVE set_fractal(enum FractalType ft)
 {
     switch (ft) {
 
-    case FRACTAL_MANDELBROT:
+    case FractalType_MANDELBROT:
         eval_Fractal = &eval_Mandelbrot;
         break;
 
-    case FRACTAL_BURNING_SHIP:
+    case FractalType_BURNING_SHIP:
         eval_Fractal = &eval_BurningShip;
         break;
 
@@ -185,15 +185,15 @@ void EMSCRIPTEN_KEEPALIVE set_color(enum ColorMethod cm)
 {
     switch (cm) {
 
-    case COLOR_GRAYSCALE:
+    case ColorMethod_GRAYSCALE:
         colorize_Method = &colorize_Grayscale;
         break;
 
-    case COLOR_BLACKBODY:
+    case ColorMethod_BLACKBODY:
         colorize_Method = &colorize_Blackbody;
         break;
 
-    case COLOR_RAINBOW:
+    case ColorMethod_RAINBOW:
         colorize_Method = &colorize_Rainbow;
         break;
 
