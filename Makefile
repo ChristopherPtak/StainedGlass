@@ -18,8 +18,8 @@ all: engine.js
 engine.js: engine.c constants.h
 	$(EMCC) $(EMFLAGS) -o engine.js engine.c
 
-constants.h: make-constants.sh
-	$(SHELL) make-constants.sh
+constants.h: genconstants.sh
+	$(SHELL) genconstants.sh
 
 .PHONY: clean
 clean:
