@@ -1,4 +1,16 @@
 
+class Block
+{
+    constructor(minX, minY, maxX, maxY, dist)
+    {
+        this.minX = minX;
+        this.minY = minY;
+        this.maxX = maxX;
+        this.maxY = maxY;
+        this.dist = dist;
+    }
+}
+
 class Driver
 {
     constructor(display, engine)
@@ -58,14 +70,14 @@ class Driver
         // Divide the screen space into blocks
         for (let i = 0; i < blocksX; ++i) {
             for (let j = 0; j < blocksY; ++j) {
-                blocks.push({
-                    minX: i * BLOCK_SIZE,
-                    minY: j * BLOCK_SIZE,
-                    maxX: (i + 1) * BLOCK_SIZE,
-                    maxY: (j + 1) * BLOCK_SIZE,
-                    dist: Math.sqrt(Math.pow(i - (blocksX / 2) + 0.5, 2) +
-                                    Math.pow(j - (blocksY / 2) + 0.5, 2))
-                });
+                blocks.push(new Block(
+                    i * BLOCK_SIZE,
+                    j * BLOCK_SIZE,
+                    (i + 1) * BLOCK_SIZE,
+                    (j + 1) * BLOCK_SIZE,
+                    Math.sqrt(Math.pow(i - (blocksX / 2) + 0.5, 2) +
+                              Math.pow(j - (blocksY / 2) + 0.5, 2))
+                ));
             }
         }
 
