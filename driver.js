@@ -1,13 +1,21 @@
 
 class Block
 {
-    constructor(minX, minY, maxX, maxY, dist)
+    constructor(minX, minY, maxX, maxY, cornerPointX, cornerPointY)
     {
         this.minX = minX;
         this.minY = minY;
         this.maxX = maxX;
         this.maxY = maxY;
-        this.dist = dist;
+        this.cornerPointX = cornerPointX;
+        this.cornerPointY = cornerPointY;
+    }
+
+    getDistanceTo(pointX, pointY)
+    {
+        const a = Math.pow(pointX - this.cornerPointX, 2);
+        const b = Math.pow(pointY - this.cornerPointY, 2);
+        return Math.sqrt(a + b);
     }
 }
 
@@ -65,31 +73,26 @@ class Driver
         const blocksX = Math.ceil(this.sizeX / BLOCK_SIZE);
         const blocksY = Math.ceil(this.sizeY / BLOCK_SIZE);
 
+        let driver = this;
         let blocks = [];
 
         // Divide the screen space into blocks
         for (let i = 0; i < blocksX; ++i) {
             for (let j = 0; j < blocksY; ++j) {
                 blocks.push(new Block(
-                    i * BLOCK_SIZE,
-                    j * BLOCK_SIZE,
-                    (i + 1) * BLOCK_SIZE,
-                    (j + 1) * BLOCK_SIZE,
-                    Math.sqrt(Math.pow(i - (blocksX / 2) + 0.5, 2) +
-                              Math.pow(j - (blocksY / 2) + 0.5, 2))
+                    i * BLOCK_SIZE, j * BLOCK_SIZE,
+                    (i + 1) * BLOCK_SIZE, (j + 1) * BLOCK_SIZE,
+                    this.cornerX + (((i * BLOCK_SIZE) / this.sizeX) * this.scaleX),
+                    this.cornerY - (((j * BLOCK_SIZE) / this.sizeY) * this.scaleY)
                 ));
             }
         }
 
         // Sort the blocks by distance to the center
         blocks.sort(function (blockA, blockB) {
-            if (blockA.dist > blockB.dist) {
-                return -1;
-            } else if (blockA.dist < blockB.dist) {
-                return 1;
-            } else {
-                return 0;
-            }
+            let distA = blockA.getDistanceTo(driver.viewCenterX, driver.viewCenterY);
+            let distB = blockB.getDistanceTo(driver.viewCenterX, driver.viewCenterY);
+            return (distA > distB) ? -1 : 1;
         });
 
         // Add all the blocks to the render queue
