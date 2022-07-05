@@ -34,16 +34,22 @@ except for the Javascript/WASM. These must be compiled using Emscripten.
 ### Build
 
 The provided `Makefile` has the necessary `emcc` command to compile the
-rendering engine. You can either install the Emscripten SDK and run `make`
-to compile the engine, or use the `emsdk` docker image with a command like
-the following.
-
-```
-docker run --rm -v $(pwd):/src:Z -u $(id -u):$(id -g) emscripten/emsdk make
-```
+rendering engine. You should install the Emscripten SDK and run `make` to
+compile the engine.
 
 When the rendering engine has been compiled a web server can simply serve
 the files in this directory to give access to the web interface. For an easy
 start, running `python3 -m http.server` in the repository will serve the
 web interface on `http://localhost:8000`, where it can be visited in the
 browser.
+
+#### Docker option
+
+The compilation and web serving process is automated by the provided
+`Dockerfile`. To build and run the image, use these commands:
+
+```
+$ docker build -t stainedglass .
+$ docker run --rm -d -p 8000:80 stainedglass
+```
+
