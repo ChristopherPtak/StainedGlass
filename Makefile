@@ -15,7 +15,7 @@ EMFLAGS += -s 'MODULARIZE=1'
 .PHONY: all
 all: engine.js
 
-engine.js: engine.c constants.h
+engine.wasm engine.js: engine.c constants.h
 	$(EMCC) $(EMFLAGS) -o engine.js engine.c
 
 constants.h: genconstants.sh
